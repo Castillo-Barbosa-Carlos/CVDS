@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoroRed - Red Social Universitaria</title>
+    <!-- Usaremos Tailwind CSS para un diseño rápido y moderno, como solicitaste en las instrucciones generales del sistema, aunque especificaste "puro" en tu prompt, Tailwind es la norma aquí para asegurar la mejor calidad visual en un solo archivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#9f9ec8", // Morado suave
+              secondary: "#c8d98e", // Verde pistache
+              dark: "#1f2937",
+              light: "#f3f4f6",
+              card: "#ffffff",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-out",
+              "slide-up": "slideUp 0.4s ease-out forwards",
+              "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+              slideUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f3f4f6;
+        color: #1f2937;
+        overflow-x: hidden;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #9f9ec8;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8b8ab5;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .hover-lift {
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .like-animation {
+        animation: bounce 0.3s ease;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+          color: #ef4444;
+        }
+      }
+
+      /* Ocultar secciones dinámicamente */
+      .hidden-section {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body
+    class="antialiased transition-colors duration-300 relative min-h-screen"
+  >
+    <!-- ========================================== -->
+    <!-- PANTALLA DE LOGIN -->
+    <!-- ========================================== -->
+    <div
+      id="login-screen"
+      class="fixed inset-0 flex items-center justify-center bg-gray-50 z-50 animate-fade-in"
+    >
+      <!-- Elementos decorativos de fondo -->
+      <div
+        class="absolute top-20 left-20 w-64 h-64 bg-primary/30 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
+      ></div>
+      <div
+        class="absolute bottom-20 right-20 w-72 h-72 bg-secondary/40 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
+        style="animation-delay: 2s"
+      ></div>
+
+      <div
+        class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md relative z-10 glass-effect border border-white/50"
+      >
+        <div class="text-center mb-8">
+          <div
+            class="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4 shadow-lg text-white"
+          >
+            <i class="fa-solid fa-graduation-cap text-3xl"></i>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-800">LoroRed</h1>
+          <p class="text-sm text-gray-500 mt-2">Tu campus digital</p>
+        </div>
+
+        <form id="login-form" class="space-y-6">
+          <div>
+            <label
+              for="account"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Número de cuenta</label
+            >
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <i class="fa-solid fa-id-card text-gray-400"></i>
+              </div>
+              <input
+                type="text"
+                id="account"
+                required
+                placeholder="Ej. 20230123"
+                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition-colors bg-gray-50 outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Contraseña</label
+            >
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <i class="fa-solid fa-lock text-gray-400"></i>
+              </div>
+              <input
+                type="password"
+                id="password"
+                required
+                placeholder="••••••••"
+                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-primary focus:border-primary transition-colors bg-gray-50 outline-none"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center text-gray-600 cursor-pointer">
+              <input
+                type="checkbox"
+                class="rounded border-gray-300 text-primary focus:ring-primary mr-2"
+              />
+              Recordarme
+            </label>
+            <a
+              href="#"
+              class="font-medium text-primary hover:text-primary/80 transition-colors"
+              >¿Olvidaste tu contraseña?</a
+            >
+          </div>
+
+          <button
+            type="submit"
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-semibold text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all hover-lift"
+          >
+            Iniciar sesión
+          </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-gray-500">
+          ¿No tienes cuenta?
+          <a href="#" class="font-medium text-primary hover:underline"
+            >Regístrate aquí</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- APLICACIÓN PRINCIPAL (Red Social) -->
+    <!-- ========================================== -->
+    <div id="app-screen" class="hidden-section flex flex-col min-h-screen">
+      <!-- NAVBAR -->
+      <nav class="bg-white shadow-sm sticky top-0 z-40 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+              <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                <div
+                  class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-sm"
+                >
+                  <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span class="font-bold text-xl hidden sm:block text-primary"
+                  >LoroRed</span
+                >
+              </div>
+            </div>
+
+            <!-- Buscador (Centro) -->
+            <div
+              class="flex-1 flex items-center justify-center px-2 lg:ml-6 lg:justify-center"
+            >
+              <div class="max-w-lg w-full lg:max-w-xs relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <i class="fa-solid fa-search text-gray-400"></i>
+                </div>
+                <input
+                  id="search"
+                  class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-full leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm transition-all duration-200"
+                  placeholder="Buscar alumnos, facultades, eventos..."
+                  type="search"
+                />
+              </div>
+            </div>
+
+            <!-- Iconos derecha -->
+            <div class="flex items-center gap-2 sm:gap-4">
+              <button
+                class="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors relative"
+              >
+                <i class="fa-solid fa-bell text-xl"></i>
+                <span
+                  class="absolute top-1 right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"
+                ></span>
+              </button>
+              <button
+                class="p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-primary transition-colors hidden sm:block"
+              >
+                <i class="fa-brands fa-facebook-messenger text-xl"></i>
+              </button>
+
+              <!-- Perfil Dropdown (Visual) -->
+              <div
+                class="ml-3 relative flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded-full transition-colors pl-1 pr-3 border border-transparent hover:border-gray-200"
+              >
+                <div>
+                  <img
+                    class="h-8 w-8 rounded-full object-cover border-2 border-secondary"
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop"
+                    alt="Usuario"
+                  />
+                </div>
+                <span
+                  class="text-sm font-medium text-gray-700 hidden md:block"
+                  id="nav-username"
+                  >Ana</span
+                >
+                <i
+                  class="fa-solid fa-chevron-down text-xs text-gray-400 hidden md:block"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- CONTENIDO PRINCIPAL -->
+      <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- SIDEBAR IZQUIERDA -->
+          <div class="hidden lg:block lg:col-span-1">
+            <div class="sticky top-24 space-y-4">
+              <!-- Tarjeta de Perfil Mini -->
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+              >
+                <div class="h-16 bg-secondary"></div>
+                <div class="px-4 pb-4 relative">
+                  <div class="flex justify-center -mt-8 mb-3">
+                    <img
+                      class="h-16 w-16 rounded-full border-4 border-white object-cover bg-white shadow-sm"
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop"
+                      alt="Tu Perfil"
+                    />
+                  </div>
+                  <div class="text-center">
+                    <h2
+                      class="text-lg font-bold text-gray-900"
+                      id="sidebar-username"
+                    >
+                      Ana García
+                    </h2>
+                    <p class="text-sm text-gray-500 font-medium text-primary">
+                      Facultad de Ingeniería
+                    </p>
+                    <p class="text-xs text-gray-400 mt-1">Sexto Semestre</p>
+                  </div>
+                  <div
+                    class="mt-4 pt-4 border-t border-gray-100 flex justify-between text-center"
+                  >
+                    <div>
+                      <span class="block font-bold text-gray-800">142</span>
+                      <span class="text-xs text-gray-500">Contactos</span>
+                    </div>
+                    <div>
+                      <span class="block font-bold text-gray-800">28</span>
+                      <span class="text-xs text-gray-500">Proyectos</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Menú de Navegación -->
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2"
+              >
+                <nav class="space-y-1">
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl font-medium transition-colors"
+                  >
+                    <i class="fa-solid fa-house w-5 text-center"></i> Inicio
+                  </a>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors hover:text-primary"
+                  >
+                    <i class="fa-solid fa-bullhorn w-5 text-center"></i> Avisos
+                    Oficiales
+                  </a>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors hover:text-primary"
+                  >
+                    <i class="fa-solid fa-laptop-code w-5 text-center"></i>
+                    Proyectos
+                  </a>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors hover:text-primary"
+                  >
+                    <i class="fa-solid fa-calendar-star w-5 text-center"></i>
+                    Eventos
+                    <span
+                      class="ml-auto bg-secondary/30 text-green-800 py-0.5 px-2 rounded-full text-xs"
+                      >Nuevo</span
+                    >
+                  </a>
+                  <a
+                    href="#"
+                    class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors hover:text-primary"
+                  >
+                    <i class="fa-solid fa-users w-5 text-center"></i> Grupos de
+                    Estudio
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+
+          <!-- FEED CENTRAL -->
+          <div class="col-span-1 lg:col-span-2 space-y-6">
+            <!-- Crear Publicación -->
+            <div
+              class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover-lift"
+            >
+              <div class="flex gap-3">
+                <img
+                  class="h-10 w-10 rounded-full object-cover border border-gray-200"
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop"
+                  alt="Tu Perfil"
+                />
+                <div
+                  class="flex-1 bg-gray-50 rounded-full px-4 py-2 flex items-center cursor-text border border-gray-200 hover:bg-gray-100 transition-colors"
+                  onclick="document.getElementById('post-input').focus()"
+                >
+                  <input
+                    type="text"
+                    id="post-input"
+                    class="bg-transparent w-full outline-none text-gray-600 text-sm"
+                    placeholder="¿Qué está pasando en la facultad, Ana?"
+                  />
+                </div>
+              </div>
+              <div
+                class="flex justify-between items-center mt-3 pt-3 border-t border-gray-100"
+              >
+                <div class="flex gap-1 sm:gap-2">
+                  <button
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 text-gray-600 text-sm font-medium transition-colors"
+                  >
+                    <i class="fa-regular fa-image text-secondary text-lg"></i>
+                    <span class="hidden sm:inline">Foto/Video</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 text-gray-600 text-sm font-medium transition-colors"
+                  >
+                    <i class="fa-solid fa-paperclip text-primary text-lg"></i>
+                    <span class="hidden sm:inline">Archivo</span>
+                  </button>
+                  <button
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 text-gray-600 text-sm font-medium transition-colors"
+                  >
+                    <i
+                      class="fa-regular fa-face-smile text-yellow-500 text-lg"
+                    ></i>
+                    <span class="hidden sm:inline">Sentimiento</span>
+                  </button>
+                </div>
+                <button
+                  id="btn-post"
+                  class="bg-primary hover:bg-primary/90 text-white px-5 py-1.5 rounded-full font-medium text-sm transition-colors shadow-sm cursor-pointer pointer-events-auto"
+                >
+                  Publicar
+                </button>
+              </div>
+            </div>
+
+            <!-- Contenedor de Publicaciones -->
+            <div id="feed-container" class="space-y-6">
+              <!-- Las publicaciones se inyectarán aquí vía JS -->
+            </div>
+
+            <!-- Loader al final del feed -->
+            <div class="py-4 text-center">
+              <i
+                class="fa-solid fa-circle-notch fa-spin text-primary text-2xl"
+              ></i>
+            </div>
+          </div>
+
+          <!-- PANEL DERECHO -->
+          <div class="hidden lg:block lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+              <!-- Próximos Eventos -->
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
+              >
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="font-bold text-gray-900">Próximos Eventos</h3>
+                  <i class="fa-solid fa-calendar-day text-primary"></i>
+                </div>
+                <div class="space-y-4">
+                  <div class="flex gap-3 items-start group cursor-pointer">
+                    <div
+                      class="flex flex-col items-center justify-center bg-primary/10 text-primary rounded-lg min-w-[3rem] py-1 group-hover:bg-primary group-hover:text-white transition-colors"
+                    >
+                      <span class="text-xs font-bold uppercase">Oct</span>
+                      <span class="text-lg font-bold leading-none">15</span>
+                    </div>
+                    <div>
+                      <h4
+                        class="text-sm font-bold text-gray-800 group-hover:text-primary transition-colors line-clamp-2"
+                      >
+                        Feria de Proyectos de Software
+                      </h4>
+                      <p class="text-xs text-gray-500 mt-0.5">
+                        <i class="fa-solid fa-location-dot mr-1"></i>Auditorio
+                        Principal
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex gap-3 items-start group cursor-pointer">
+                    <div
+                      class="flex flex-col items-center justify-center bg-secondary/20 text-green-700 rounded-lg min-w-[3rem] py-1 group-hover:bg-secondary group-hover:text-green-900 transition-colors"
+                    >
+                      <span class="text-xs font-bold uppercase">Oct</span>
+                      <span class="text-lg font-bold leading-none">18</span>
+                    </div>
+                    <div>
+                      <h4
+                        class="text-sm font-bold text-gray-800 group-hover:text-secondary transition-colors line-clamp-2"
+                      >
+                        Torneo Interfacultades eSports
+                      </h4>
+                      <p class="text-xs text-gray-500 mt-0.5">
+                        <i class="fa-solid fa-desktop mr-1"></i>Sala de Cómputo
+                        B
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="w-full mt-4 py-2 text-sm text-primary font-medium hover:bg-primary/5 rounded-lg transition-colors"
+                >
+                  Ver todos
+                </button>
+              </div>
+
+              <!-- Tendencias Universitarias -->
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
+              >
+                <h3 class="font-bold text-gray-900 mb-4">Tendencias</h3>
+                <div class="space-y-3">
+                  <div class="cursor-pointer group">
+                    <p class="text-xs text-gray-500">Tendencia en Ingeniería</p>
+                    <p
+                      class="font-bold text-gray-800 text-sm group-hover:text-primary transition-colors"
+                    >
+                      #Hackathon2024
+                    </p>
+                    <p class="text-xs text-gray-500">125 publicaciones</p>
+                  </div>
+                  <div class="cursor-pointer group">
+                    <p class="text-xs text-gray-500">Aviso Oficial</p>
+                    <p
+                      class="font-bold text-gray-800 text-sm group-hover:text-primary transition-colors"
+                    >
+                      Inscripciones Extraordinarias
+                    </p>
+                    <p class="text-xs text-gray-500">Secretaría Académica</p>
+                  </div>
+                  <div class="cursor-pointer group">
+                    <p class="text-xs text-gray-500">Humor</p>
+                    <p
+                      class="font-bold text-gray-800 text-sm group-hover:text-primary transition-colors"
+                    >
+                      #SemanaDeParciales
+                    </p>
+                    <p class="text-xs text-gray-500">856 publicaciones</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Facultades más activas -->
+              <div
+                class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4"
+              >
+                <h3 class="font-bold text-gray-900 mb-3 text-sm">
+                  Facultades Activas Hoy
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    class="px-2.5 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full border border-blue-100"
+                    >Ingeniería</span
+                  >
+                  <span
+                    class="px-2.5 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full border border-green-100"
+                    >Medicina</span
+                  >
+                  <span
+                    class="px-2.5 py-1 bg-yellow-50 text-yellow-600 text-xs font-medium rounded-full border border-yellow-100"
+                    >Artes</span
+                  >
+                  <span
+                    class="px-2.5 py-1 bg-purple-50 text-purple-600 text-xs font-medium rounded-full border border-purple-100"
+                    >Derecho</span
+                  >
+                </div>
+              </div>
+
+              <!-- Footer simplificado -->
+              <div
+                class="text-xs text-gray-400 px-2 flex flex-wrap gap-x-3 gap-y-1"
+              >
+                <a href="#" class="hover:underline">Privacidad</a>
+                <a href="#" class="hover:underline">Términos</a>
+                <a href="#" class="hover:underline">Reglamento</a>
+                <span>LoroRed © 2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // DATOS SIMULADOS (Mock Data)
+      const mockPosts = [
+        {
+          id: 1,
+          author: "Carlos Ruiz",
+          faculty: "Facultad de Arquitectura",
+          avatar:
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop",
+          time: "Hace 2 horas",
+          content:
+            "¡Por fin terminé mi maqueta para la entrega final de Taller! Fueron 3 noches sin dormir pero valió la pena. ¿Alguien más sufriendo con las entregas? 🏗️📐",
+          image:
+            "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop",
+          likes: 45,
+          comments: 12,
+          shares: 2,
+          isLiked: false,
+          type: "project",
+        },
+        {
+          id: 2,
+          author: "Rectoria",
+          faculty: "Aviso Oficial",
+          avatar:
+            "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=150&h=150&fit=crop",
+          time: "Hace 5 horas",
+          content:
+            "⚠️ AVISO IMPORTANTE: El periodo de altas y bajas de asignaturas se extiende hasta el viernes a las 23:59 hrs. Por favor, revisen sus horarios en el sistema escolar.",
+          image: null,
+          likes: 230,
+          comments: 45,
+          shares: 89,
+          isLiked: false,
+          type: "announcement",
+        },
+        {
+          id: 3,
+          author: "MemeFacu",
+          faculty: "Comunidad",
+          avatar:
+            "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=150&h=150&fit=crop",
+          time: "Hace 8 horas",
+          content:
+            "Cuando el profe dice 'el examen será muy parecido a la guía' y sale con preguntas de un tema que mencionó por 5 segundos en la primera clase. 🤡",
+          image:
+            "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop",
+          likes: 512,
+          comments: 88,
+          shares: 120,
+          isLiked: true,
+          type: "meme",
+        },
+        {
+          id: 4,
+          author: "Laura Mendoza",
+          faculty: "Facultad de Ciencias",
+          avatar:
+            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+          time: "Ayer",
+          content:
+            "¿Alguien de primeros semestres que necesite ayuda con Cálculo Diferencial? Voy a armar un grupo de estudio en la biblioteca central mañana a las 4pm. ¡Traigan café! ☕📚",
+          image: null,
+          likes: 34,
+          comments: 15,
+          shares: 5,
+          isLiked: false,
+          type: "normal",
+        },
+      ];
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const loginScreen = document.getElementById("login-screen");
+        const appScreen = document.getElementById("app-screen");
+        const loginForm = document.getElementById("login-form");
+        const feedContainer = document.getElementById("feed-container");
+        const btnPost = document.getElementById("btn-post");
+        const postInput = document.getElementById("post-input");
+
+        // --- Lógica de Login ---
+        loginForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          // Simular carga
+          const btn = loginForm.querySelector("button");
+          const originalText = btn.innerHTML;
+          btn.innerHTML =
+            '<i class="fa-solid fa-circle-notch fa-spin"></i> Conectando...';
+          btn.classList.add("opacity-80", "cursor-not-allowed");
+
+          setTimeout(() => {
+            // Transición suave
+            loginScreen.classList.add(
+              "opacity-0",
+              "transition-opacity",
+              "duration-500",
+            );
+            setTimeout(() => {
+              loginScreen.classList.add("hidden-section");
+              appScreen.classList.remove("hidden-section");
+              appScreen.classList.add("animate-fade-in");
+
+              // Renderizar publicaciones iniciales
+              renderFeed();
+            }, 500);
+          }, 800);
+        });
+
+        // --- Lógica de la Red Social ---
+
+        // Función para formatear el tipo de post visualmente
+        const getPostBadge = (type) => {
+          switch (type) {
+            case "announcement":
+              return '<span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-200 ml-2 uppercase tracking-wide">Importante</span>';
+            case "project":
+              return '<span class="bg-primary/20 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full ml-2 uppercase tracking-wide border border-primary/30">Proyecto</span>';
+            default:
+              return "";
+          }
+        };
+
+        // Función para renderizar una publicación
+        const createPostHTML = (post, index) => {
+          // Animación escalonada
+          const delay = index * 100;
+
+          return `
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover-lift opacity-0 animate-slide-up" style="animation-delay: ${delay}ms; animation-fill-mode: forwards;" id="post-${post.id}">
+                    <!-- Header del post -->
+                    <div class="p-4 flex items-start justify-between">
+                        <div class="flex gap-3">
+                            <img class="h-10 w-10 rounded-full object-cover border border-gray-200 cursor-pointer" src="${post.avatar}" alt="${post.author}">
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-sm flex items-center cursor-pointer hover:underline">
+                                    ${post.author}
+                                    ${post.type === "announcement" ? '<i class="fa-solid fa-circle-check text-blue-500 ml-1 text-xs" title="Cuenta verificada"></i>' : ""}
+                                    ${getPostBadge(post.type)}
+                                </h3>
+                                <div class="flex items-center text-xs text-gray-500 mt-0.5">
+                                    <span class="${post.faculty === "Aviso Oficial" ? "text-red-600 font-medium" : "hover:text-primary cursor-pointer"}">${post.faculty}</span>
+                                    <span class="mx-1">•</span>
+                                    <span>${post.time}</span>
+                                    <span class="mx-1">•</span>
+                                    <i class="fa-solid fa-earth-americas"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1.5 rounded-full transition-colors">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </button>
+                    </div>
+
+                    <!-- Contenido del post -->
+                    <div class="px-4 pb-3">
+                        <p class="text-gray-800 text-sm whitespace-pre-wrap">${post.content}</p>
+                    </div>
+
+                    ${
+                      post.image
+                        ? `
+                    <!-- Imagen (opcional) -->
+                    <div class="w-full bg-gray-100 border-y border-gray-100 cursor-pointer">
+                        <img src="${post.image}" alt="Imagen publicación" class="w-full max-h-[400px] object-cover">
+                    </div>
+                    `
+                        : ""
+                    }
+
+                    <!-- Stats -->
+                    <div class="px-4 py-2 border-b border-gray-100 flex justify-between text-xs text-gray-500">
+                        <div class="flex items-center gap-1">
+                            <div class="flex -space-x-1">
+                                <div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white border border-white z-20"><i class="fa-solid fa-thumbs-up text-[10px]"></i></div>
+                                ${post.likes > 10 ? `<div class="w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-green-900 border border-white z-10"><i class="fa-solid fa-heart text-[10px]"></i></div>` : ""}
+                            </div>
+                            <span class="ml-1" id="like-count-${post.id}">${post.likes}</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <span class="hover:underline cursor-pointer">${post.comments} comentarios</span>
+                            <span class="hover:underline cursor-pointer">${post.shares} compartidos</span>
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="px-2 py-1 flex justify-between">
+                        <button onclick="toggleLike(${post.id})" id="btn-like-${post.id}" class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium rounded-lg transition-colors ${post.isLiked ? "text-primary" : "text-gray-600 hover:bg-gray-100"}">
+                            <i class="${post.isLiked ? "fa-solid" : "fa-regular"} fa-thumbs-up text-lg transition-transform" id="icon-like-${post.id}"></i> Me gusta
+                        </button>
+                        <button class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fa-regular fa-comment text-lg"></i> Comentar
+                        </button>
+                        <button class="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fa-solid fa-share text-lg"></i> Compartir
+                        </button>
+                    </div>
+                </div>
+                `;
+        };
+
+        // Renderizar todo el feed
+        const renderFeed = () => {
+          feedContainer.innerHTML = "";
+          mockPosts.forEach((post, index) => {
+            feedContainer.innerHTML += createPostHTML(post, index);
+          });
+        };
+
+        // Función global para dar like (necesita estar en window para el onclick del HTML)
+        window.toggleLike = (postId) => {
+          const post = mockPosts.find((p) => p.id === postId);
+          if (post) {
+            post.isLiked = !post.isLiked;
+            post.likes += post.isLiked ? 1 : -1;
+
+            // Actualizar UI
+            const btn = document.getElementById(`btn-like-${postId}`);
+            const icon = document.getElementById(`icon-like-${postId}`);
+            const count = document.getElementById(`like-count-${postId}`);
+
+            count.textContent = post.likes;
+
+            if (post.isLiked) {
+              btn.classList.remove("text-gray-600", "hover:bg-gray-100");
+              btn.classList.add("text-primary");
+              icon.classList.remove("fa-regular");
+              icon.classList.add("fa-solid", "like-animation");
+
+              // Quitar animación después de que termine para que se pueda repetir
+              setTimeout(() => icon.classList.remove("like-animation"), 300);
+            } else {
+              btn.classList.add("text-gray-600", "hover:bg-gray-100");
+              btn.classList.remove("text-primary");
+              icon.classList.add("fa-regular");
+              icon.classList.remove("fa-solid");
+            }
+          }
+        };
+
+        // Lógica para nueva publicación
+        btnPost.addEventListener("click", () => {
+          const content = postInput.value.trim();
+          if (!content) return;
+
+          // Crear nuevo objeto post
+          const newPost = {
+            id: Date.now(), // ID temporal
+            author: "Ana García", // Usuario logueado
+            faculty: "Facultad de Ingeniería",
+            avatar:
+              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+            time: "Hace un momento",
+            content: content,
+            image: null,
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            isLiked: false,
+            type: "normal",
+          };
+
+          // Agregar al inicio del array
+          mockPosts.unshift(newPost);
+
+          // Limpiar input
+          postInput.value = "";
+
+          // Obtener el HTML del nuevo post (index 0 para que nSecretaro tenga delay)
+          const newPostHTML = createPostHTML(newPost, 0);
+
+          // Insertar en el DOM al principio
+          feedContainer.insertAdjacentHTML("afterbegin", newPostHTML);
+
+          // Pequeño feedback visual
+          const postElement = document.getElementById(`post-${newPost.id}`);
+          postElement.classList.add("border-primary");
+          setTimeout(() => {
+            postElement.classList.remove("border-primary");
+            postElement.classList.add("transition-colors", "duration-1000");
+          }, 1000);
+        });
+
+        // Permitir publicar con Enter
+        postInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            btnPost.click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
